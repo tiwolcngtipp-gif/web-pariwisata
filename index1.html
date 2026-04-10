@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Escape | Jelajahi Keindahan Alam Indonesia</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Swiper CSS (Hero Slider) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Alpine JS (Logika Klik Animasi) -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        natureGreen: '#2D5A27',
+                        natureBrown: '#8B5E3C',
+                        skyBlue: '#0077B6',
+                        softWhite: '#FDFBF7'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Loading Screen */
+        #loader {
+            position: fixed; inset: 0; background: white; z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .swiper-hero { width: 100%; height: 100vh; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
+
+        .scrolled-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            color: #1A1C19 !important;
+        }
+
+        /* ANIMASI KLIK PAKET (Mengecil & Membesar) */
+        @keyframes superPop {
+            0% { transform: scale(1); }
+            30% { transform: scale(0.85); } /* Mengecil saat ditekan */
+            60% { transform: scale(1.15); } /* Membesar/Melompat */
+            100% { transform: scale(1); }   /* Kembali normal */
+        }
+        .animate-super-pop {
+            animation: superPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            z-index: 30;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Custom Swiper pagination warna */
+        .swiper-pagination-bullet-active { background: #2D5A27 !important; }
+        .swiper-button-next, .swiper-button-prev { color: white !important; }
+    </style>
+</head>
+<body class="bg-softWhite text-gray-800 overflow-x-hidden">
+
+    <!-- LOADING SCREEN -->
+    <div id="loader">
+        <div class="w-16 h-16 border-4 border-natureGreen border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav x-data="{ scrolled: false }" 
+         @scroll.window="scrolled = (window.pageYOffset > 50)"
+         :class="scrolled ? 'scrolled-nav py-4' : 'bg-transparent py-6 text-white'"
+         class="fixed w-full z-50 transition-all duration-500 px-6 lg:px-20 flex justify-between items-center">
+        
+        <a href="#" class="text-2xl font-bold tracking-tighter font-heading uppercase tracking-widest">Nature<span class="text-natureGreen">Escape.</span></a>
+        
+        <div class="hidden md:flex space-x-8 font-medium text-xs uppercase tracking-widest">
+            <a href="#destinasi" class="hover:text-natureGreen transition">Destinasi</a>
+            <a href="#paket" class="hover:text-natureGreen transition">Paket Wisata</a>
+            <a href="#testi" class="hover:text-natureGreen transition">Testimoni</a>
+            <a href="#kontak" class="hover:text-natureGreen transition">Kontak</a>
+        </div>
+
+        <button class="bg-natureGreen text-white px-6 py-2 rounded-full text-xs font-semibold hover:bg-natureBrown transition active:scale-90">
+            Booking Sekarang
+        </button>
+    </nav>
+
+    <!-- HERO SLIDER SECTION (3 Foto Geser Otomatis) -->
+    <section class="relative h-screen w-full">
+        <div class="swiper swiper-hero absolute inset-0">
+            <div class="swiper-wrapper">
+                <!-- Slide 1 -->
+                <div class="swiper-slide relative">
+                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070" alt="Mountain View">
+                    <div class="absolute inset-0 bg-black/40"></div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="swiper-slide relative">
+                    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070" alt="Lake View">
+                    <div class="absolute inset-0 bg-black/40"></div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="swiper-slide relative">
+                    <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2070" alt="Forest View">
+                    <div class="absolute inset-0 bg-black/40"></div>
+                </div>
+            </div>
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Overlay Text Content -->
+        <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-4" data-aos="fade-up" data-aos-duration="1500">
+            <h1 class="text-5xl md:text-8xl font-bold text-white font-heading mb-6 leading-tight drop-shadow-2xl">
+                Jelajahi Keindahan <br> <span class="text-natureGreen italic">Alam Indonesia</span>
+            </h1>
+            <p class="text-white/90 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto italic">
+                "Kembali ke alam, temukan kedamaian dalam dirimu."
+            </p>
+            <div class="flex flex-col md:flex-row gap-4">
+                <a href="#destinasi" class="bg-natureGreen text-white px-10 py-4 rounded-full font-semibold hover:scale-105 transition-all shadow-xl">Mulai Perjalanan</a>
+                <a href="#paket" class="bg-white/20 backdrop-blur-md text-white border border-white/30 px-10 py-4 rounded-full font-semibold hover:bg-white hover:text-natureGreen transition-all">Lihat Paket Wisata</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DESTINASI GRID SECTION -->
+    <section id="destinasi" class="py-24 px-6 lg:px-20 bg-softWhite">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16 text-center" data-aos="fade-up">
+                <h2 class="text-natureGreen font-semibold tracking-widest uppercase mb-2">Destinasi Pilihan</h2>
+                <p class="text-4xl font-bold font-heading">Keajaiban Alam Menantimu</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card Destinasi -->
+                <div class="relative overflow-hidden rounded-3xl h-[400px] group cursor-pointer shadow-lg" data-aos="zoom-in">
+                    <img src="Bromo Mountain 🌄🇮🇩.jpg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 text-white">
+                        <h3 class="text-2xl font-bold mb-1">Bromo Mountain</h3>
+                        <p class="text-sm opacity-0 group-hover:opacity-100 transition duration-500 italic">Nikmati udara murni di atas awan.</p>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-3xl h-[400px] group cursor-pointer shadow-lg" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="pantai pink.jpg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 text-white">
+                        <h3 class="text-2xl font-bold mb-1">Pantai Tangsi</h3>
+                        <p class="text-sm opacity-0 group-hover:opacity-100 transition duration-500 italic">Pantai Pink Yang Sangat Indah  Suara ombak penenang jiwa.</p>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-3xl h-[400px] group cursor-pointer shadow-lg" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="rajaampat.jpg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 text-white">
+                        <h3 class="text-2xl font-bold mb-1">Raja Ampat</h3>
+                        <p class="text-sm opacity-0 group-hover:opacity-100 transition duration-500 italic">Keindahan Yang Tidak Bisa Terlupakan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAKET WISATA (KLIK SUPER POP) -->
+    <section id="paket" class="py-24 bg-natureGreen text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-center text-4xl font-bold mb-4 font-heading" data-aos="fade-up">Pilih Paket Wisata</h2>
+            <p class="text-center text-white/60 mb-16 italic" data-aos="fade-up">"Klik pada kartu untuk merasakan sensasi petualangan!"</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                
+                <!-- Paket Hemat -->
+                <div x-data="{ pop: false }" 
+                     @click="pop = true; setTimeout(() => pop = false, 500)"
+                     :class="pop ? 'animate-super-pop' : ''"
+                     class="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] cursor-pointer hover:bg-white/10 transition-all duration-300 relative group" 
+                     data-aos="fade-up">
+                    <h3 class="text-xl font-semibold mb-2">Paket Hemat</h3>
+                    <p class="text-3xl font-bold mb-6 text-skyBlue">350rb <span class="text-sm font-light text-white/50">/trip</span></p>
+                    <ul class="text-white/70 space-y-3 mb-10 text-sm italic">
+                        <li>• Transportasi PP</li>
+                        <li>• Tiket Masuk Alam</li>
+                        <li>• Guide Lokal</li>
+                    </ul>
+                    <button class="w-full py-4 border border-white/30 rounded-full group-hover:bg-white group-hover:text-natureGreen transition font-bold uppercase tracking-widest text-xs">Pilih Paket</button>
+                </div>
+
+                <!-- Paket Reguler (Populer) -->
+                <div x-data="{ pop: false }" 
+                     @click="pop = true; setTimeout(() => pop = false, 500)"
+                     :class="pop ? 'animate-super-pop' : ''"
+                     class="bg-white p-10 rounded-[2.5rem] cursor-pointer shadow-2xl scale-105 relative text-gray-800 transition-all duration-300" 
+                     data-aos="fade-up" data-aos-delay="100">
+                    <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-skyBlue text-white text-[10px] px-6 py-1 rounded-full font-bold uppercase tracking-widest shadow-lg">Terpopuler</span>
+                    <h3 class="text-xl font-semibold mb-2 text-natureGreen">Paket Reguler</h3>
+                    <p class="text-4xl font-bold mb-6">750rb <span class="text-sm font-light text-gray-400">/trip</span></p>
+                    <ul class="text-gray-500 space-y-3 mb-10 text-sm italic">
+                        <li>• Transportasi + Makan 3x</li>
+                        <li>• Penginapan (1 Malam)</li>
+                        <li>• Dokumentasi Foto</li>
+                    </ul>
+                    <button class="w-full py-4 bg-natureGreen text-white rounded-full hover:bg-natureBrown transition font-bold uppercase tracking-widest text-xs shadow-lg">Pesan Sekarang</button>
+                </div>
+
+                <!-- Paket Premium -->
+                <div x-data="{ pop: false }" 
+                     @click="pop = true; setTimeout(() => pop = false, 500)"
+                     :class="pop ? 'animate-super-pop' : ''"
+                     class="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] cursor-pointer hover:bg-white/10 transition-all duration-300 relative group" 
+                     data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-xl font-semibold mb-2">Paket Premium</h3>
+                    <p class="text-3xl font-bold mb-6 text-skyBlue">1.5jt <span class="text-sm font-light text-white/50">/trip</span></p>
+                    <ul class="text-white/70 space-y-3 mb-10 text-sm italic">
+                        <li>• Hotel / Villa Mewah</li>
+                        <li>• Private Guide 24 Jam</li>
+                        <li>• Video Cinematic Drone</li>
+                    </ul>
+                    <button class="w-full py-4 border border-white/30 rounded-full group-hover:bg-white group-hover:text-natureGreen transition font-bold uppercase tracking-widest text-xs">Pilih Paket</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONI -->
+    <section id="testi" class="py-24 bg-softWhite overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-center text-3xl font-bold mb-16 font-heading">Kisah Mereka Yang Telah Kembali</h2>
+            
+            <div class="flex flex-wrap justify-center gap-8">
+                <!-- Testi Card -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-sm" data-aos="fade-up">
+                    <p class="text-gray-600 italic mb-6">"Perjalanan yang benar-benar menyegarkan pikiran. Pelayanan sangat profesional dan destinasi yang dipilih benar-benar hidden gems!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-natureGreen rounded-full flex items-center justify-center text-white font-bold mr-4">A</div>
+                        <div>
+                            <p class="font-bold">Andi Pratama</p>
+                            <p class="text-xs text-gray-400">Pecinta Alam - Jakarta</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tambah testi lain jika perlu -->
+                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-sm" data-aos="fade-up">
+                    <p class="text-gray-600 italic mb-6">"“Open trip ini bener-bener worth it! Semua udah diatur rapi, dari transport sampai itinerary. Tinggal nikmatin perjalanan tanpa ribet. View-nya juga gila sih, cakep banget 😍”"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-natureGreen rounded-full flex items-center justify-center text-white font-bold mr-4">A</div>
+                        <div>
+                            <p class="font-bold">Tiara Andini</p>
+                            <p class="text-xs text-gray-400">Pecinta Alam - Bogor</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-sm" data-aos="fade-up">
+                    <p class="text-gray-600 italic mb-6">“Pelayanannya mantap, harga sesuai sama fasilitas yang didapat. Perjalanan nyaman, aman, dan pastinya memorable. Recommended buat yang mau healing 🌿”</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-natureGreen rounded-full flex items-center justify-center text-white font-bold mr-4">A</div>
+                        <div>
+                            <p class="font-bold">Pratama Sutoyo</p>
+                            <p class="text-xs text-gray-400">Pecinta Alam - Bekasi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section id="kontak" class="py-24 px-6 bg-white">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div data-aos="fade-right">
+                <h2 class="text-4xl font-bold mb-6 font-heading text-natureGreen">Siap Untuk Healing?</h2>
+                <p class="text-gray-500 mb-10 leading-relaxed">Isi formulir di samping, tim ahli kami akan mengatur perjalanan impianmu. Tidak perlu pusing urusan logistik, biarkan kami yang mengurus semuanya.</p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center group cursor-pointer">
+                        <div class="w-12 h-12 bg-natureGreen/10 flex items-center justify-center rounded-full text-natureGreen group-hover:bg-natureGreen group-hover:text-white transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <span class="ml-4 font-medium text-gray-700">travelnatureescape@gmail.com</span>
+                    </div>
+                    <div class="flex items-center group cursor-pointer">
+                        <div class="w-12 h-12 bg-natureGreen/10 flex items-center justify-center rounded-full text-natureGreen group-hover:bg-natureGreen group-hover:text-white transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                        </div>
+                        <span class="ml-4 font-medium text-gray-700">+62 812 3456 7890</span>
+                    </div>
+                </div>
+            </div>
+
+            <form class="space-y-6 bg-softWhite p-10 rounded-[2.5rem] shadow-inner" data-aos="fade-left">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs uppercase font-bold text-gray-400 mb-2 block">Nama Lengkap</label>
+                        <input type="text" class="w-full px-6 py-4 rounded-2xl bg-white border-transparent focus:border-natureGreen focus:ring-0 transition" placeholder="doni Doe">
+                    </div>
+                    <div>
+                        <label class="text-xs uppercase font-bold text-gray-400 mb-2 block">Email</label>
+                        <input type="email" class="w-full px-6 py-4 rounded-2xl bg-white border-transparent focus:border-natureGreen focus:ring-0 transition" placeholder="doni@email.com">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs uppercase font-bold text-gray-400 mb-2 block">Tujuan Wisata</label>
+                    <select class="w-full px-6 py-4 rounded-2xl bg-white border-transparent focus:border-natureGreen transition appearance-none">
+                        <option>Pilih Destinasi</option>
+                        <option>Pegunungan</option>
+                        <option>Pantai & Laut</option>
+                        <option>Hutan Tropis</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs uppercase font-bold text-gray-400 mb-2 block">Tanggal</label>
+                        <input type="date" class="w-full px-6 py-4 rounded-2xl bg-white border-transparent focus:border-natureGreen transition">
+                    </div>
+                    <div>
+                        <label class="text-xs uppercase font-bold text-gray-400 mb-2 block">Jumlah Orang</label>
+                        <input type="number" class="w-full px-6 py-4 rounded-2xl bg-white border-transparent focus:border-natureGreen transition" placeholder="1">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-natureGreen text-white py-5 rounded-2xl font-bold hover:bg-natureBrown shadow-lg shadow-natureGreen/20 transition-all active:scale-95">
+                    Kirim Permintaan Booking
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-natureGreen py-20 text-white/50 text-center text-xs tracking-[0.2em] uppercase">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-white text-2xl font-bold mb-4 font-heading tracking-widest italic">NatureEscape.</h2>
+            <div class="flex justify-center space-x-8 mb-10 text-white/80 font-medium">
+                <a href="#" class="hover:text-white transition">Instagram</a>
+                <a href="#" class="hover:text-white transition">TikTok</a>
+                <a href="#" class="hover:text-white transition">Youtube</a>
+            </div>
+            <p>© 2026 NatureEscape Travel Indonesia. Menjelajah Tanpa Batas.</p>
+        </div>
+    </footer>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <script>
+        // Init AOS
+        AOS.init({ duration: 1000, once: true });
+
+        // Init Swiper (Hero Slider - Otomatis)
+        const swiper = new Swiper('.swiper-hero', {
+            loop: true,
+            speed: 1200,
+            effect: 'fade', // Transisi memudar yang elegan
+            fadeEffect: { crossFade: true },
+            autoplay: {
+                delay: 5000, 
+                disableOnInteraction: false,
+            },
+            pagination: { el: '.swiper-pagination', clickable: true },
+        });
+
+        // Loader Handler
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 500);
+        });
+    </script>
+</body>
+</html>
